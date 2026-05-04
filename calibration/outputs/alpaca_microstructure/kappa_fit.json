@@ -1,0 +1,8 @@
+{
+  "log_lambda_intercept": -0.31318279222723994,
+  "kappa": 33.05159978243325,
+  "a_scale": 0.7311162579845762,
+  "fit_points": 3,
+  "horizon_seconds": 1.0,
+  "sample_every": 500
+}

@@ -1,0 +1,29 @@
+{
+  "ticker": "SPY",
+  "period": "5y",
+  "trading_days_per_year": 252,
+  "dt": {
+    "n_steps": 1255,
+    "dt_normalized": 0.0007968127490039841,
+    "dt_trading_days": 1.0,
+    "dt_year_fraction": 0.003968253968253968
+  },
+  "sigma": {
+    "window": 20,
+    "daily_sigma_close_to_close": 0.010749537438271783,
+    "annualized_sigma_close_to_close": 0.17064361662387284,
+    "daily_sigma_open_to_close": 0.008994803182395846,
+    "annualized_sigma_open_to_close": 0.14278807387555056,
+    "daily_sigma_overnight": 0.006441514292900929,
+    "annualized_sigma_overnight": 0.1022558693141036,
+    "rolling_daily_sigma_mean": 0.009732464744114438,
+    "rolling_daily_sigma_median": 0.008516620105729004,
+    "rolling_annualized_sigma_mean": 0.15449808813978408,
+    "rolling_annualized_sigma_median": 0.13519715286342943
+  },
+  "notes": [
+    "The main project currently uses rolling close-to-close daily volatility directly.",
+    "The paper's kappa and market-spread calibration cannot be inferred from daily OHLCV alone.",
+    "If you keep T=1 and use one step per row, dt_normalized is the quantity used by the current simulator."
+  ]
+}

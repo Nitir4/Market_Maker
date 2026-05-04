@@ -1,0 +1,31 @@
+Calibration Summary
+===================
+Ticker: SPY
+Period: 5y
+Trading days/year: 252
+
+dt
+--
+n_steps: 1255
+dt_normalized: 0.00079681
+dt_trading_days: 1.00
+dt_year_fraction: 0.00396825
+
+sigma
+-----
+daily_sigma_close_to_close: 0.01074954
+annualized_sigma_close_to_close: 0.17064362
+daily_sigma_open_to_close: 0.00899480
+annualized_sigma_open_to_close: 0.14278807
+daily_sigma_overnight: 0.00644151
+annualized_sigma_overnight: 0.10225587
+rolling_daily_sigma_mean: 0.00973246
+rolling_daily_sigma_median: 0.00851662
+rolling_annualized_sigma_mean: 0.15449809
+rolling_annualized_sigma_median: 0.13519715
+
+notes
+-----
+- The main project currently uses rolling close-to-close daily volatility directly.
+- The paper's kappa and market-spread calibration cannot be inferred from daily OHLCV alone.
+- If you keep T=1 and use one step per row, dt_normalized is the quantity used by the current simulator.

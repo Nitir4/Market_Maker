@@ -1,0 +1,38 @@
+Alpaca Microstructure Calibration
+================================
+Symbol: SPY
+Feed: iex
+
+M summary
+---------
+symbol: SPY
+n_quotes: 6145872
+mean_spread: 0.11091171277241041
+median_spread: 0.08999999999997499
+spread_p25: 0.029999999999972715
+spread_p75: 0.1500000000000341
+mean_spread_bps: 2.365626428347561
+median_spread_bps: 1.9143437523271365
+
+dt and sigma summary
+--------------------
+n_mid_updates: 6140258
+median_dt_seconds: 0.000666112
+mean_dt_seconds: 0.10230856101829486
+sigma_mid_log_return_per_step: nan
+
+kappa fit
+---------
+log_lambda_intercept: -0.31318279222723994
+kappa: 33.05159978243325
+a_scale: 0.7311162579845762
+fit_points: 3
+horizon_seconds: 1.0
+sample_every: 500
+
+caveats
+-------
+- This calibration is SPY-specific only if you run it with symbol SPY.
+- Alpaca free historical market data uses the IEX feed, not full NBBO.
+- kappa is estimated from a synthetic fill approximation with no queue model.
+- Treat these results as simulator inputs, not universal market constants.
