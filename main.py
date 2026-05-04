@@ -65,14 +65,16 @@ def main():
     print("\n" + "=" * 50)
     print("STEP 4: Running AS Strategy Simulation")
     print("=" * 50)
-    as_results = run_as_simulation(prices, rolling_vol)
+    from config import MC_RANDOM_SEED
+    import numpy as np
+    as_results = run_as_simulation(prices, rolling_vol, rng=np.random.default_rng(MC_RANDOM_SEED))
     print(f"Simulation complete. {len(as_results)} timesteps.")
 
     # --- Step 5: Run Baseline Simulation ---
     print("\n" + "=" * 50)
     print("STEP 5: Running Baseline Simulation")
     print("=" * 50)
-    baseline_results = run_baseline_simulation(prices, rolling_vol)
+    baseline_results = run_baseline_simulation(prices, rolling_vol, rng=np.random.default_rng(MC_RANDOM_SEED))
     print(f"Baseline complete. {len(baseline_results)} timesteps.")
 
     # --- Step 6: Compute Metrics ---

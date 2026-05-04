@@ -8,7 +8,7 @@ import matplotlib.dates as mdates
 import numpy as np
 from scipy.stats import norm
 import os
-from config import PLOTS_DIR
+from config import PLOTS_DIR, INITIAL_CASH
 
 
 def _save(filename):
@@ -81,12 +81,12 @@ def plot_pnl_comparison(as_df, baseline_df):
     ax.plot(baseline_df.index, baseline_df['pnl'], color='tomato',
             linewidth=1.3, linestyle='--', label='Baseline (fixed spread)')
 
-    ax.axhline(y=as_df['pnl'].iloc[0], color='gray', linewidth=0.8,
-               linestyle=':', label='Starting PnL')
+    ax.axhline(y=as_df.attrs.get('initial_cash', INITIAL_CASH), color='gray', linewidth=0.8,
+               linestyle=':', label='Starting equity')
 
     ax.set_xlabel('Date')
-    ax.set_ylabel('PnL (USD)')
-    ax.set_title('PnL Over Time: AS Strategy vs Baseline')
+    ax.set_ylabel('Mark-to-market equity (USD)')
+    ax.set_title('Equity Over Time: AS Strategy vs Baseline')
     ax.legend()
     plt.tight_layout()
     _save("03_pnl_comparison.png")
