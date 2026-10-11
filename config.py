@@ -22,14 +22,16 @@ KAPPA = 33.05159978243325  # Calibrated SPY IEX fill-decay proxy from Alpaca mic
 
 # --- Simulation Settings ---
 INITIAL_CASH = 100_000   # Starting cash in simulation
-T = 1.0                  # Total time horizon (normalized to 1)
+OBSERVATION_DT = 1.0      # One row = one trading day, independent of dataset length
+FILL_REFERENCE_DT = 1.0   # Fixed trading-day reference for the illustrative arrival proxy
+TRADING_DAYS_PER_YEAR = 252.0
 
 # --- Market Microstructure Proxy ---
 MARKET_SPREAD = 0.09    # Calibrated SPY IEX median spread proxy from Alpaca quote data
                         # Used in the paper-style arrival-scale calibration
 
 # --- Baseline Settings ---
-FIXED_SPREAD = 0.012  # Naive baseline now quotes the calibrated market spread
+FIXED_SPREAD = MARKET_SPREAD  # Passive baseline uses the configured market spread
 
 # --- Monte Carlo (for final version) ---
 N_SIMULATIONS = 100      # Number of Monte Carlo runs

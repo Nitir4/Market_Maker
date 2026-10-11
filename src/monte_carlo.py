@@ -22,6 +22,8 @@ def estimate_abm_parameters(prices):
     Model:
       S_{t+1} = S_t + mu + sigma * Z_t
     """
+    if not isinstance(prices, pd.Series) or len(prices) < 3 or not np.isfinite(prices).all() or (prices <= 0).any():
+        raise ValueError('ABM calibration needs at least three finite positive prices.')
     price_changes = prices.diff().dropna()
     return float(price_changes.mean()), float(price_changes.std())
 
@@ -32,6 +34,8 @@ def simulate_abm_price_path(prices, rng, min_price=MC_MIN_PRICE):
     the historical series. A small floor keeps simulated prices positive so the
     downstream log-return calculations remain valid.
     """
+    if not np.isfinite(min_price) or min_price <= 0:
+        raise ValueError('Price floor must be finite and positive.')
     mu_step, sigma_step = estimate_abm_parameters(prices)
     simulated = np.empty(len(prices), dtype=float)
     simulated[0] = float(prices.iloc[0])
@@ -76,7 +80,8 @@ def validate_abm_monte_carlo(prices, n_paths=25, seed=MC_RANDOM_SEED):
 def _simulation_metrics_row(sim_df, run_id, strategy_name):
     metrics = compute_metrics(sim_df, strategy_name=strategy_name)
     metrics["Run"] = run_id
-    metrics["Final PnL"] = round(float(sim_df["pnl"].iloc[-1]), 2)
+    metrics["Final Equity"] = float(sim_df["pnl"].iloc[-1])
+    metrics["Final PnL"] = metrics["Total PnL"]
     metrics["Final Inventory"] = int(sim_df["inventory"].iloc[-1])
     return metrics
 
@@ -183,6 +188,8 @@ def run_monte_carlo(prices, n_simulations=N_SIMULATIONS, seed=MC_RANDOM_SEED, ba
     strategies. Historical plots and metrics are untouched; this produces
     separate distributions for "what could have happened."
     """
+    if isinstance(n_simulations, bool) or not isinstance(n_simulations, (int, np.integer)) or n_simulations < 1:
+        raise ValueError('Simulation count must be a positive integer.')
     as_rows = []
     baseline_rows = []
 
