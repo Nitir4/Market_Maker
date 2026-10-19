@@ -4,10 +4,10 @@
 # ============================================================
 
 # --- Data Settings ---
-TICKER = "SPY"           # Asset to simulate market making on
+TICKER = "^GSPC"         # S&P 500 index data from yfinance
 PERIOD = "5years"           # How much historical data to pull
-START_DATE = "2021-05-01"
-END_DATE = "2026-05-01"
+START_DATE = "2010-01-04"
+END_DATE = "2025-12-31"
 DATA_PATH = "data/prices.csv"
 
 # --- Statistical Settings ---

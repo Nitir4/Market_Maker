@@ -11,27 +11,34 @@ from config import DATA_PATH, END_DATE, PERIOD, START_DATE, TICKER
 def _download_prices():
     print(f"Downloading {TICKER} data from yfinance...")
     print(f"Date range: {START_DATE} to {END_DATE} (end exclusive in yfinance)")
+    download_end = pd.Timestamp(END_DATE) + pd.Timedelta(days=1)
     raw = yf.download(
         TICKER,
         start=START_DATE,
-        end=END_DATE,
+        end=download_end.strftime("%Y-%m-%d"),
         period=None,
         interval="1d",
         auto_adjust=True,
         progress=False,
     )
 
-    if raw.empty or "Close" not in raw:
-        raise ValueError("yfinance returned no usable close data for the requested range.")
+    if isinstance(raw.columns, pd.MultiIndex):
+        raw.columns = raw.columns.get_level_values(0)
 
-    prices = raw["Close"].squeeze()
-    if prices.empty:
-        raise ValueError("Downloaded close series is empty.")
+    if raw.empty or "Close" not in raw:
+        raise ValueError("yfinance returned no usable OHLCV data for the requested range.")
+
+    expected_columns = ["Open", "High", "Low", "Close", "Volume"]
+    missing_columns = [column for column in expected_columns if column not in raw.columns]
+    if missing_columns:
+        raise ValueError(f"Downloaded data is missing expected columns: {missing_columns}")
+
+    ohlcv = raw[expected_columns].copy()
 
     os.makedirs(os.path.dirname(DATA_PATH), exist_ok=True)
-    prices.to_frame(name="Close").to_csv(DATA_PATH)
+    ohlcv.to_csv(DATA_PATH)
     print(f"Data saved to {DATA_PATH}")
-    return prices
+    return ohlcv["Close"].squeeze()
 
 
 def load_data():
@@ -45,10 +52,8 @@ def load_data():
         print(f"Loading data from {DATA_PATH}...")
         df = pd.read_csv(DATA_PATH, index_col=0, parse_dates=True)
 
-        # 🔴 FIX: Clean column names
         df.columns = df.columns.str.strip()
 
-        # 🔴 FIX: Handle different possible column names
         if 'Close' in df.columns:
             prices = df['Close']
         elif 'Adj Close' in df.columns:
@@ -58,7 +63,7 @@ def load_data():
 
         requested_start = pd.Timestamp(START_DATE)
         requested_end = pd.Timestamp(END_DATE)
-        if prices.index.min() > requested_start or prices.index.max() < requested_end - pd.Timedelta(days=3):
+        if prices.index.min() > requested_start or prices.index.max() < requested_end:
             print("Cached data does not cover the requested date range. Refreshing from yfinance...")
             try:
                 prices = _download_prices()
